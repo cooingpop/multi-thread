@@ -1,7 +1,7 @@
 /*
  * MasterReportHandler.java 2024-01-16
  *
- * @author junyoung.park
+ * @author joonyeong.park
  * Copyright 2024. PlayD Corp. All rights Reserved.
  */
 package com.wywta.worker;
