@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    default: dev
+server:
+  port: 8081
+
+  logging:
+    level:
+      org:
+        springframework:
+          scheduling=DEBUG:

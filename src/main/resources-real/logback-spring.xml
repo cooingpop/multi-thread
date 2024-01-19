@@ -1,0 +1,58 @@
+<configuration>
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level]\(%file:%line\) %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_HOME}/logs/default.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_HOME}/logs/default.log.%d{yyyyMMdd}-%i</fileNamePattern>
+            <maxHistory>3</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>1000MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level]\(%file:%line\) %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="handler-file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_HOME}/logs/handler.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_HOME}/logs/handler.log.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level]\(%file:%line\) %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Application Loggers -->
+    <logger name="org.springframework" level="info" />
+
+    <logger name="org.mybatis.spring" level="info" />
+
+    <logger name="org.apache.ibatis.logging.jdbc.BaseJdbcLogger" level="info" />
+
+    <logger name="org.apache.axis" level="info" />
+
+    <logger name="org.apache.commons.beanutils" level="info" />
+
+    <logger name="org.apache.commons.configuration" level="info" />
+
+    <logger name="com.nsmcorp.dailysynker" level="debug"/>
+
+    <!-- Root Logger -->
+    <root level="debug">
+        <appender-ref ref="file" />
+    </root>
+
+    <logger name="com.nsmcorp.dailysynker.worker.StatReportHandler" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="handler-file" />
+    </logger>
+
+</configuration>
