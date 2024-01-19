@@ -107,15 +107,16 @@ public class MasterReportService {
             return CompletableFuture.completedFuture(1);
         }
 
-        int result = 0;
+       int result = 0;
         if (StringUtils.equals("REGIST", status.getStatus()) && Objects.isNull(status.getResult())) {
             result = 1;
             status.setStatus("BUILT");
             status.setResult("SUCCESS");
-        } else if (StringUtils.equals("NONE", status.getStatus()) && Objects.isNull(status.getResult())) {
+        } else if (StringUtils.equals("NONE", status.getStatus()) && StringUtils.equals("SUCCESS", status.getResult())) {
             result = 1;
             status.setResult(null);
-        } else if (StringUtils.equals("FAIL", status.getStatus()) ) {
+        }
+        else if (StringUtils.equals("FAIL", status.getStatus()) ) {
             result = 1;
             status.setStatus("NONE");
             status.setResult(null);

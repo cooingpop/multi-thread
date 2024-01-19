@@ -31,7 +31,7 @@ public class MasterReportHandler implements Runnable {
 
     private List<Status> statusList;
 
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(THREAD_COUNT);
 
     private ScheduledFuture<?> scheduledFuture;
 

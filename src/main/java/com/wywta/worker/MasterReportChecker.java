@@ -33,7 +33,7 @@ public class MasterReportChecker implements Runnable {
 
     private List<Status> statusList;
 
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(THREAD_COUNT);
 
     private ScheduledFuture<?> scheduledFuture;
 
@@ -55,21 +55,10 @@ public class MasterReportChecker implements Runnable {
                 long start = System.currentTimeMillis();
                 List<Status> targetList = statusList;
                 List<CompletableFuture<Integer>> futuresList = targetList.stream()
-                        .filter(f -> StringUtils.equals("REGIST", f.getStatus()))
+                        .filter(f -> StringUtils.equals("REGIST", f.getStatus()) && Objects.isNull(f.getResult())
+                        || StringUtils.equals("NONE", f.getStatus()) && StringUtils.equals("SUCCESS", f.getResult()))
                         .map(target -> masterReportService.asyncChecker(reportItem, target))
                         .toList();
-
-//                for (CompletableFuture<Integer> future : futuresList) {
-//                    try {
-//                        // CompletableFuture의 실행을 기다림
-//                        future.join();
-//
-//                        // 일정 시간 동안 sleep
-//                        Thread.sleep(100);
-//                    } catch (InterruptedException e) {
-//                        Thread.currentThread().interrupt();
-//                    }
-//                }
 
                 // 성공한 CompletableFuture 개수를 계산
                 int successCount = futuresList.stream()

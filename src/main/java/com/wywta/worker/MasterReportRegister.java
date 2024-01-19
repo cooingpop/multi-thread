@@ -34,7 +34,7 @@ public class MasterReportRegister implements Runnable {
 
     private List<Status> statusList;
 
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(THREAD_COUNT);
 
     private ScheduledFuture<?> scheduledFuture;
 
@@ -59,21 +59,17 @@ public class MasterReportRegister implements Runnable {
                 log.info("{} Start MasterReportRegister {}", LOG_PREFIX, Thread.currentThread().getName());
                 long start = System.currentTimeMillis();
                 List<Status> targetList = statusList;
-//                List<CompletableFuture<Integer>> futures = targetList.stream().filter(f -> StringUtils.equals("NONE", f.getStatus()) && Objects.isNull(f.getResult()))
-//                        .map(target -> masterReportService.asyncRegister(reportItem, target))
-//                        .map(future -> future.thenApply(fn -> statusDAO.insertStatus(fn)))
-//                        .toList();
 
                 CompletableFuture[] futures = targetList.stream().filter(f -> StringUtils.equals("NONE", f.getStatus()) && Objects.isNull(f.getResult()))
                         .map(target -> masterReportService.asyncRegister(reportItem, target))
                         .map(future -> future.thenApply(statusDAO::insertStatus))
                         .toArray(CompletableFuture[]::new);
-//
-//                CompletableFuture[] futures = targetList.stream()
-//                        .map(target -> CompletableFuture.supplyAsync(() -> regist(target), executor))
-//                        .map(future -> future.thenApply(ds -> adSynkerDAO.insertMasterReportStatus(ds)))
-//                        .toArray(CompletableFuture[]::new);
                 CompletableFuture.allOf(futures).join();
+
+//              List<CompletableFuture<Integer>> futures = targetList.stream().filter(f -> StringUtils.equals("NONE", f.getStatus()) && Objects.isNull(f.getResult()))
+//                        .map(target -> masterReportService.asyncRegister(reportItem, target))
+//                        .map(future -> future.thenApply(fn -> statusDAO.insertStatus(fn)))
+//                        .toList();
 
 //                CompletableFutureUtils.getCompletableFutureAllOfJobs(start, futures, log, LOG_PREFIX, reportItem, minWaitSeconds);
                 long successCount = Arrays.stream(futures).filter(r -> {
@@ -83,7 +79,7 @@ public class MasterReportRegister implements Runnable {
                 }).count();
 
                 long elapsed = System.currentTimeMillis() - start;
-                log.info("{}Item='{}', {}개(성공{}개) 완료, elapsed : {} ms", LOG_PREFIX, reportItem.name(), targetList.size(), successCount, elapsed);
+                log.info("{}Item='{}', {}개(성공{}개) 완료, elapsed : {} ms", LOG_PREFIX, reportItem.name(), futures.length, successCount, elapsed);
 
 
                 if (!Thread.currentThread().isInterrupted()) {
