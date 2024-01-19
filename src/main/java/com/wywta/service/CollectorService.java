@@ -90,9 +90,8 @@ public class CollectorService {
 
     private void handleException(Exception e) {
         log.error("{} handleException {}", LOG_PREFIX, e.getMessage(), e);
-        // Your exception handling logic goes here
+        // exception 핸들링 추가
         e.printStackTrace();
-        // You might want to log the exception or perform other actions
     }
 
 }

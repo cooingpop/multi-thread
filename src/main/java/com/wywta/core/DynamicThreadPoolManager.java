@@ -51,6 +51,8 @@ public class DynamicThreadPoolManager {
 
     private final int poolSize = 10;
 
+    private final int maximumPoolSize = 1000;
+
     private static ConcurrentMap<String, Integer> currentMaxActiveThread = new ConcurrentHashMap<>(){{
         put("registerExecutor", 0);
         put("handlerExecutor", 0);
@@ -58,10 +60,8 @@ public class DynamicThreadPoolManager {
         // 추가적으로 필요한 초기화 작업 수행
     }};
 
-    private final int maximumPoolSize = 1000;
-
     // 일정 주기로 스레드 풀 상태 확인 및 동적으로 늘리기
-    @Scheduled(fixedDelay = 60000) // 5 seconds
+    @Scheduled(fixedDelay = 60000)
     public void monitorAndAdjustThreadPool() {
         log.info("{} start monitoring", LOG_PREFIX);
 
@@ -73,7 +73,6 @@ public class DynamicThreadPoolManager {
     public void monitorThreadPoolSize(String executorBeanName) {
         log.info("{} Monitor target thread: {}", LOG_PREFIX, executorBeanName);
         ThreadPoolTaskExecutor executor = applicationContext.getBean(executorBeanName, ThreadPoolTaskExecutor.class);
-
         if (executor != null) {
             ThreadPoolExecutor threadPoolExecutor = executor.getThreadPoolExecutor();
 
