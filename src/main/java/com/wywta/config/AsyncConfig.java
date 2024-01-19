@@ -16,14 +16,14 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 public class AsyncConfig {
 
     // ThreadPool에서 항상 유지되는 최소 스레드수
-    int corePoolSize = 2; // 18
+    private final int corePoolSize = 2;
 
     // 최대 스레드 수
-    int maxPoolSize = 25; // 25
+    private final  int maxPoolSize = 25;
 
-    int queueCapacity = 200; // 200
+    private final  int queueCapacity = 200;
 
-    int keepAliveSeconds = 60;
+    private final  int keepAliveSeconds = 60;
 
     @Bean(name = "registerExecutor")
     public ThreadPoolTaskExecutor asyncRegisterExecutor() {

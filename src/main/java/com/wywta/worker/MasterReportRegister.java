@@ -11,7 +11,6 @@ import com.wywta.dao.StatusDAO;
 import com.wywta.model.Constants;
 import com.wywta.model.Status;
 import com.wywta.service.MasterReportService;
-import com.wywta.util.CompletableFutureUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
